@@ -47,6 +47,14 @@ namespace TOM
         }
 
         [WebMethod]
+        public List<Voo> BuscarVoosPorFiltro(string dataVoo, string origem, string destino)
+        {
+
+            var voos = _vooRepository.FindAll();
+            return voos.ToList();
+        }
+
+        [WebMethod]
         public Voo BuscarPorId(int idVoo)
         {
             var voo = _vooRepository.FindFirstById(idVoo);

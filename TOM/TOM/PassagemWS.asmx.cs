@@ -30,11 +30,29 @@ namespace TOM
         public bool ComprarBilhete(int idVoo)
         {
             var voo = _vooRepository.GetById(idVoo);
-            voo.Passagens = _passagemRepository.BuscarPorVoo(voo.Id).ToList();
 
             if (null != voo)
+                return EfeturarCompraBilhete(voo);
+
+            return false;
+        }
+
+        [WebMethod]
+        public bool ComprarBilhetes(int numeroVoo, int quantidade)
+        {
+            var voo = _vooRepository.BuscarPorNumeroVoo(numeroVoo);
+
+            if (null != voo)
+                return EfeturarCompraBilhete(voo, quantidade);
+
+            return false;
+        }
+
+        private bool EfeturarCompraBilhete(Voo voo, int quantidade = 1)
+        {
+            if (voo.RetornarQuantidadeLugaresLivres() >= quantidade)
             {
-                if (voo.RetornarQuantidadeLugaresLivres() > 0)
+                for (int i = 0; i < quantidade; i++)
                 {
                     var passagem = new Passagem()
                     {
@@ -44,28 +62,25 @@ namespace TOM
                         DataVoo = voo.DataVoo,
                     };
 
-                    //voo.Passagens.Add(passagem);
-
-                    //_vooRepository.SaveOrUpdate(voo);
-
                     _passagemRepository.Save(passagem);
-
-                    return true;
                 }
 
-                return false;
+                return true;
             }
 
             return false;
         }
+
 
         [WebMethod]
         public bool DevolverBilhete(int numeroVoo)
         {
             var voo = _vooRepository.BuscarPorNumeroVoo(numeroVoo);
 
-            if (null == voo || !voo.Passagens.Any())
+            if (null == voo)
                 return false;
+            else
+                voo.Passagens = _passagemRepository.BuscarPorVoo(voo.Id).ToList();
 
             var bilhete = voo.Passagens.FirstOrDefault();
 
@@ -90,13 +105,9 @@ namespace TOM
         [WebMethod]
         public List<Passagem> BuscarPorVoo(int idVoo)
         {
-            var passagens = _passagemRepository.BuscarPorVoo(idVoo).ToList();
-                //_vooRepository.GetById(idVoo).Passagens.ToList(); //BuscarPassagensPorIdVoo(idVoo).ToList();
-
-            //var voo = _vooRepository.FindFirstById(idVoo);
-
-            //var passagensvoo = voo.Passagens;
-
+            var passagens = _passagemRepository
+                .BuscarPorVoo(idVoo)
+                .ToList();
 
             return passagens;
         }
