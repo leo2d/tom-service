@@ -73,6 +73,7 @@
     <Compile Include="Data\Repositories\PassagemRepository.cs" />
     <Compile Include="Data\Repositories\Repositorybase.cs" />
     <Compile Include="Data\Repositories\VooRepository.cs" />
+    <Compile Include="DTOs\FiltroBuscaVooDTO.cs" />
     <Compile Include="DTOs\VooDTO.cs" />
     <Compile Include="Entities\BaseEntity.cs" />
     <Compile Include="Entities\Passagem.cs" />

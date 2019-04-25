@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Services;
 using TOM.Core.Data.Config;
 using TOM.Core.Data.Repositories;
+using TOM.Core.DTOs;
 using TOM.Core.Entities;
 
 namespace TOM
@@ -47,10 +48,17 @@ namespace TOM
         }
 
         [WebMethod]
-        public List<Voo> BuscarVoosPorFiltro(string dataVoo, string origem, string destino)
+        public List<Voo> BuscarVoosPorFiltro(FiltroBuscaVooDTO filtro)
         {
-
             var voos = _vooRepository.FindAll();
+
+            List<Voo> result = new List<Voo>();
+
+            if (!string.IsNullOrEmpty(filtro.Origem))
+                voos = voos.Where(x => x.Origem.Trim().ToLower().Equals(filtro.Origem.Trim().ToLower())).ToList();
+            if(!string.IsNullOrEmpty(filtro.Destino))
+                voos = voos.Where(x => x.Destino.Trim().ToLower().Equals(filtro.Destino.Trim().ToLower())).ToList();
+
             return voos.ToList();
         }
 
