@@ -80,6 +80,10 @@ namespace TOM
         public List<Passagem> BuscarTodas()
         {
             var passagens = _passagemRepository.FindAll().ToList();
+
+            foreach (var passagem in passagens)
+                passagem.Voo = _vooRepository.GetById(passagem.IdVoo);
+
             return passagens;
         }
 
